@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+add_to_shell_config() {
+  local shell_config_file=$1
+  local path_to_add="/usr/local/go/bin"
+
+  if grep -q "export PATH=.*$path_to_add" "$shell_config_file"; then
+    echo "Path already exists in $shell_config_file"
+  else
+    echo "export PATH=\$PATH:$path_to_add" >> "$shell_config_file"
+    echo "Path added to $shell_config_file"
+  fi
+}
+
 # todo: check the recent version and use it by default
 DESIRED_GO_VERSION="$1"
 GO_INSTALL_DIR="/usr/local/go"
@@ -25,4 +37,25 @@ fi
 echo "Unpacking /tmp/go$DESIRED_GO_VERSION.linux-amd64.tar.gz";
 tar -C /usr/local -xzf /tmp/go$DESIRED_GO_VERSION.linux-amd64.tar.gz;
 echo "Go version set to $DESIRED_GO_VERSION.";
+
+if grep -q "export PATH=.*\/usr\/local\/go\/bin" /etc/profile; then
+  echo "/usr/local/go/bin is already in /etc/profile"
+else
+  if [ -n "$BASH_VERSION" ]; then
+    shell_config_file="$HOME/.bashrc"
+  elif [ -n "$ZSH_VERSION" ]; then
+    shell_config_file="$HOME/.zshrc"
+  else
+    shell_config_file="$HOME/.profile"
+  fi
+
+  if [ ! -f "$shell_config_file" ]; then
+    touch "$shell_config_file"
+  fi
+
+  add_to_shell_config "$shell_config_file"
+
+  source "$shell_config_file"
+fi
+
 echo "You're ready to go!";
