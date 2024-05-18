@@ -1,4 +1,4 @@
-# Go Version Manager :rocket:
+# Go Version Manager Lite :rocket: 
 
 This script automates the change between Go versions on Linux systems. 🐧
 
