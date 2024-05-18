@@ -1,6 +1,6 @@
-# Go Installation Script :rocket:
+# Go Version Manager :rocket:
 
-This script automates the installation of Go on Linux systems. 🐧
+This script automates the change between Go versions on Linux systems. 🐧
 
 ## Usage
 
